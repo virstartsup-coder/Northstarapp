@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Northstar — Adulting OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    header {
+      padding: 28px 0;
+      position: sticky;
+      top: 0;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      z-index: 100;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: #38bdf8;
+    }
+
+    .nav-btn {
+      background: #38bdf8;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      padding: 90px 0 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: #cbd5e1;
+      margin-bottom: 30px;
+      max-width: 550px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      padding: 14px 22px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .primary-btn {
+      background: #38bdf8;
+      color: #020617;
+      border: none;
+    }
+
+    .secondary-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+    }
+
+    .primary-btn:hover,
+    .secondary-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, #1e293b, #111827);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(56,189,248,0.1);
+      color: #7dd3fc;
+      padding: 10px 14px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #38bdf8;
+    }
+
+    .journey-box {
+      background: rgba(255,255,255,0.04);
+      padding: 20px;
+      border-radius: 20px;
+      margin-top: 18px;
+    }
+
+    .journey-box h3 {
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+    }
+
+    .journey-box ul {
+      padding-left: 20px;
+      color: #cbd5e1;
+    }
+
+    section {
+      padding: 70px 0;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      color: #94a3b8;
+      text-align: center;
+      max-width: 760px;
+      margin: auto;
+      margin-bottom: 50px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 28px;
+      border-radius: 24px;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(56,189,248,0.4);
+    }
+
+    .card h3 {
+      margin-bottom: 14px;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .roadmap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+
+    .step {
+      background: linear-gradient(180deg, #172554, #0f172a);
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .step-number {
+      width: 42px;
+      height: 42px;
+      background: #38bdf8;
+      color: black;
+      font-weight: 800;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .checklist {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: rgba(255,255,255,0.04);
+      padding: 14px;
+      border-radius: 14px;
+    }
+
+    .check-item input {
+      margin-top: 5px;
+      transform: scale(1.2);
+    }
+
+    .dashboard {
+      background: linear-gradient(180deg, #111827, #0f172a);
+      border-radius: 28px;
+      padding: 40px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .progress-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .progress-card {
+      background: rgba(255,255,255,0.04);
+      padding: 22px;
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .progress-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #38bdf8;
+      margin-top: 10px;
+    }
+
+    .cta {
+      text-align: center;
+      padding: 90px 20px;
+    }
+
+    .cta h2 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .cta p {
+      max-width: 700px;
+      margin: auto;
+      color: #cbd5e1;
+      margin-bottom: 30px;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 30px 0;
+      text-align: center;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .cta h2 {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+      <div class="logo">North<span>star</span></div>
+      <button class="nav-btn">Join Beta</button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero container">
+  <div>
+    <div class="status">
+      <div class="dot"></div>
+      Designed for young adults entering real life
+    </div>
+
+    <h1>Navigate adulthood with clarity.</h1>
+
+    <p>
+      Northstar helps young adults handle money, work, life decisions,
+      burnout, independent living, and adult responsibilities through
+      personalized step-by-step guidance.
+    </p>
+
+    <div class="hero-buttons">
+      <button class="primary-btn">Start Your Journey</button>
+      <button class="secondary-btn">See Demo Roadmap</button>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <h2>Your First Job Roadmap</h2>
+
+    <div class="journey-box">
+      <h3>Week 1 — Stabilize</h3>
+      <ul>
+        <li>Understand salary & taxes</li>
+        <li>Create a realistic monthly budget</li>
+        <li>Build emergency savings</li>
+      </ul>
+    </div>
+
+    <div class="journey-box">
+      <h3>Week 2 — Protect</h3>
+      <ul>
+        <li>Understand company insurance</li>
+        <li>Avoid debt & credit traps</li>
+        <li>Set financial priorities</li>
+      </ul>
+    </div>
+
+    <div class="journey-box">
+      <h3>Week 3 — Grow</h3>
+      <ul>
+        <li>Start your first SIP</li>
+        <li>Improve workplace communication</li>
+        <li>Create long-term goals</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">Why Northstar Exists</h2>
+    <p class="section-subtitle">
+      School teaches calculus. College teaches placements.
+      Nobody teaches adulthood.
+    </p>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Too Much Conflicting Advice</h3>
+        <p>
+          Young adults spend hours jumping between YouTube, ChatGPT,
+          Google, Reddit, and friends trying to figure out basic life decisions.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Fear of Making Mistakes</h3>
+        <p>
+          People delay taxes, investments, insurance, job switches,
+          and major decisions because they feel overwhelmed.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>No Clear Direction</h3>
+        <p>
+          Most people don't know what to prioritize first after entering independent life.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Adulting Feels Lonely</h3>
+        <p>
+          Many young professionals silently feel behind while everyone else seems to have life figured out.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="section-title">How Northstar Works</h2>
+    <p class="section-subtitle">
+      Instead of endless information, Northstar gives you a structured roadmap for real life.
+    </p>
+
+    <div class="roadmap">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Understand You</h3>
+        <p>
+          Salary, city, goals, stress levels, lifestyle, and career stage.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Create Your Roadmap</h3>
+        <p>
+          Personalized guidance based on your current life situation.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Take Action</h3>
+        <p>
+          Complete guided tasks, reminders, and structured journeys.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <h3>Reduce Overwhelm</h3>
+        <p>
+          Feel more confident, organized, and in control of adult life.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container dashboard">
+    <h2 class="section-title">Your Adulting Dashboard</h2>
+    <p class="section-subtitle">
+      Track your progress across life areas that actually matter.
+    </p>
+
+    <div class="progress-grid">
+      <div class="progress-card">
+        <h4>Emergency Fund</h4>
+        <div class="progress-value">40%</div>
+      </div>
+
+      <div class="progress-card">
+        <h4>Financial Stability</h4>
+        <div class="progress-value">68%</div>
+      </div>
+
+      <div class="progress-card">
+        <h4>Work-Life Balance</h4>
+        <div class="progress-value">55%</div>
+      </div>
+
+      <div class="progress-card">
+        <h4>Life Admin</h4>
+        <div class="progress-value">72%</div>
+      </div>
+    </div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <input type="checkbox" checked>
+        <div>
+          <strong>Create Monthly Budget</strong>
+          <p>Completed 2 days ago</p>
+        </div>
+      </div>
+
+      <div class="check-item">
+        <input type="checkbox">
+        <div>
+          <strong>Understand Health Insurance</strong>
+          <p>Suggested for this week</p>
+        </div>
+      </div>
+
+      <div class="check-item">
+        <input type="checkbox">
+        <div>
+          <strong>Start First SIP</strong>
+          <p>Recommended next milestone</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <h2>Adult life doesn’t need to feel this overwhelming.</h2>
+
+    <p>
+      Northstar helps young adults move from confusion and anxiety
+      to clarity, confidence, and structured action.
+    </p>
+
+    <button class="primary-btn">Join the Beta Waitlist</button>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Northstar — Your guide to adult life.</p>
+  </div>
+</footer>
+
+</body>
+</html>
