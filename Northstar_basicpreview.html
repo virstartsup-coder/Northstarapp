@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Northstar MVP</title>
+
+  <style>
+    *{box-sizing:border-box;font-family:Inter,Arial,sans-serif}
+
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.35), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(14,165,233,.22), transparent 35%),
+        #020617;
+      color:#020617;
+    }
+
+    .app{
+      min-height:100vh;
+      padding:28px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    .card{
+      width:100%;
+      max-width:1180px;
+      background:rgba(255,255,255,.96);
+      border-radius:30px;
+      padding:32px;
+      box-shadow:0 30px 80px rgba(0,0,0,.35);
+    }
+
+    h1,h2,h3,h4{margin-top:0;color:#020617}
+    p{color:#334155;line-height:1.6}
+
+    input,textarea,select{
+      width:100%;
+      padding:16px;
+      border-radius:16px;
+      border:1px solid #cbd5e1;
+      margin-bottom:16px;
+      font-size:15px;
+      color:#020617;
+      background:white;
+    }
+
+    textarea{min-height:110px;resize:vertical}
+
+    button{
+      border:0;
+      border-radius:16px;
+      padding:14px 18px;
+      background:linear-gradient(135deg,#2563eb,#3b82f6);
+      color:white;
+      font-weight:800;
+      cursor:pointer;
+      font-size:15px;
+    }
+
+    button:disabled{background:#94a3b8;cursor:not-allowed}
+
+    .hidden{display:none}
+
+    .onboarding-shell{
+      max-width:900px;
+      margin:auto;
+      background:rgba(15,23,42,.92);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:34px;
+      padding:46px;
+      box-shadow:0 30px 80px rgba(0,0,0,.4);
+    }
+
+    .hero-text{margin-bottom:34px}
+
+    .hero-text h1{
+      color:white;
+      font-size:56px;
+      letter-spacing:-2px;
+      margin-bottom:10px;
+    }
+
+    .hero-text p{
+      color:#cbd5e1;
+      font-size:19px;
+    }
+
+    .question-card{
+      display:flex;
+      gap:22px;
+      align-items:flex-start;
+      background:rgba(255,255,255,.055);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      padding:22px;
+      margin-bottom:20px;
+      transition:.25s ease;
+    }
+
+    .question-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(59,130,246,.55);
+      background:rgba(255,255,255,.08);
+    }
+
+    .question-number{
+      min-width:52px;
+      height:52px;
+      border-radius:16px;
+      background:linear-gradient(135deg,#2563eb,#60a5fa);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:900;
+      font-size:17px;
+    }
+
+    .question-content{flex:1}
+
+    .question-content label{
+      display:block;
+      color:white;
+      font-weight:800;
+      font-size:17px;
+      margin-bottom:12px;
+    }
+
+    .question-content input,
+    .question-content select{
+      background:rgba(2,6,23,.75);
+      color:white;
+      border:1px solid rgba(255,255,255,.12);
+      margin-bottom:0;
+    }
+
+    .question-content input::placeholder{color:#94a3b8}
+
+    .question-content input:focus,
+    .question-content select:focus{
+      outline:none;
+      border-color:#60a5fa;
+      box-shadow:0 0 0 4px rgba(59,130,246,.18);
+    }
+
+    .start-btn{
+      width:100%;
+      padding:19px;
+      margin-top:10px;
+      border-radius:20px;
+      font-size:18px;
+    }
+
+    .dashboard{
+      display:grid;
+      grid-template-columns:230px 1fr;
+      gap:24px;
+    }
+
+    .sidebar,.box,.task,.roadmap-card{
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:20px;
+      padding:20px;
+      margin-bottom:16px;
+    }
+
+    .sidebar button{
+      width:100%;
+      margin-bottom:10px;
+      text-align:left;
+    }
+
+    .tag{
+      display:inline-block;
+      background:#dbeafe;
+      color:#1e40af;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:13px;
+      margin-bottom:10px;
+    }
+
+    .small-tag{
+      display:inline-block;
+      background:#e2e8f0;
+      color:#334155;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      margin-right:4px;
+    }
+
+    .advice{
+      background:#eff6ff;
+      border-left:5px solid #2563eb;
+      padding:14px;
+      border-radius:12px;
+      color:#1e3a8a;
+      font-weight:700;
+      margin-bottom:14px;
+    }
+
+    .progress{
+      height:18px;
+      background:#e2e8f0;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:#22c55e;
+      transition:.3s;
+    }
+
+    .completed{
+      background:#f0fdf4;
+      border-color:#22c55e;
+    }
+
+    .done-btn{background:#22c55e}
+
+    @media(max-width:850px){
+      .dashboard{grid-template-columns:1fr}
+      .question-card{flex-direction:column}
+      .hero-text h1{font-size:42px}
+      .onboarding-shell{padding:28px}
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <div class="card" id="onboarding">
+    <div class="onboarding-shell">
+      <div class="hero-text">
+        <h1>Northstar</h1>
+        <p>Your AI life roadmap, execution and accountability assistant.</p>
+      </div>
+
+      <div class="question-card">
+        <div class="question-number">01</div>
+        <div class="question-content">
+          <label>What should Northstar call you?</label>
+          <input id="name" placeholder="Example: Vir Pitale">
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-number">02</div>
+        <div class="question-content">
+          <label>How old are you?</label>
+          <input id="age" type="number" placeholder="Example: 21">
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-number">03</div>
+        <div class="question-content">
+          <label>What do you currently do?</label>
+          <input id="job" placeholder="Student, fresher, founder, employee...">
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-number">04</div>
+        <div class="question-content">
+          <label>How satisfied are you with your current income?</label>
+          <select id="income">
+            <option>Struggling</option>
+            <option>Stable</option>
+            <option>Comfortable</option>
+            <option>Excellent</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-number">05</div>
+        <div class="question-content">
+          <label>Where are you in your career journey?</label>
+          <select id="careerStatus">
+            <option>Beginner / Stuck</option>
+            <option>Growing Slowly</option>
+            <option>Satisfactory Growth</option>
+            <option>Strong Growth</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="question-number">06</div>
+        <div class="question-content">
+          <label>How is your current energy and motivation level?</label>
+          <select id="energy">
+            <option>Low</option>
+            <option>Average</option>
+            <option>Good</option>
+            <option>Very High</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="startBtn" class="start-btn">Start My Journey →</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="dashboard">
+    <div class="dashboard">
+
+      <aside class="sidebar">
+        <h2>Northstar</h2>
+        <button data-section="home">Dashboard</button>
+        <button data-section="roadmap">Roadmap</button>
+        <button data-section="tracker">Progress Tracker</button>
+        <button data-section="reports">Reports</button>
+        <button data-section="profile">Profile</button>
+      </aside>
+
+      <main>
+        <section id="home">
+          <span class="tag">Dashboard</span>
+          <h1 id="welcomeText">Welcome</h1>
+
+          <div class="box">
+            <label>What is your current situation?</label>
+            <textarea id="currentSituation" placeholder="Example: I am stuck in a low-paying accounting job and want to move into ERP consulting."></textarea>
+
+            <label>Where do you want to reach?</label>
+            <textarea id="destination" placeholder="Example: I want to become an ERP functional consultant in 8 months."></textarea>
+
+            <label>By when do you want to reach there?</label>
+            <input id="timeline" type="date">
+
+            <button id="generateBtn">Generate My Roadmap</button>
+          </div>
+        </section>
+
+        <section id="roadmap" class="hidden">
+          <span class="tag">Roadmap</span>
+          <h2>Your Personalized Execution Plan</h2>
+          <div class="box">
+            <h3>Detected Situation</h3>
+            <p id="detectedSituation">Generate roadmap first.</p>
+          </div>
+          <div id="roadmapOutput"></div>
+        </section>
+
+        <section id="tracker" class="hidden">
+          <span class="tag">Progress Tracker</span>
+          <h2>Execution Progress</h2>
+
+          <div class="box">
+            <h3>Overall Progress</h3>
+            <p>
+              <strong id="completedCount">0</strong> completed out of
+              <strong id="totalCount">0</strong> —
+              <strong id="progressPercent">0%</strong>
+            </p>
+            <div class="progress">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+
+          <div class="box">
+            <h3>Your Tasks</h3>
+            <div id="taskList">Generate a roadmap first.</div>
+          </div>
+        </section>
+
+        <section id="reports" class="hidden">
+          <span class="tag">Reports</span>
+          <h2>Progress Reports</h2>
+          <div class="box">
+            <h3>Weekly Report</h3>
+            <p id="weeklyReport">Complete tasks to generate weekly insights.</p>
+            <h3>Monthly Report</h3>
+            <p id="monthlyReport">Your monthly direction report will appear here.</p>
+          </div>
+        </section>
+
+        <section id="profile" class="hidden">
+          <span class="tag">Profile</span>
+          <h2>Your Background</h2>
+          <div class="box" id="profileDetails"></div>
+        </section>
+      </main>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+let user = {};
+let roadmap = [];
+let tasks = [];
+
+const $ = id => document.getElementById(id);
+
+$("startBtn").addEventListener("click", startDashboard);
+$("generateBtn").addEventListener("click", generateRoadmap);
+
+document.querySelectorAll(".sidebar button").forEach(btn => {
+  btn.addEventListener("click", () => showSection(btn.dataset.section));
+});
+
+function getValue(id){
+  return $(id).value.trim();
+}
+
+function startDashboard(){
+  user = {
+    name:getValue("name") || "User",
+    age:getValue("age") || "Not added",
+    job:getValue("job") || "Not added",
+    income:getValue("income"),
+    careerStatus:getValue("careerStatus"),
+    energy:getValue("energy")
+  };
+
+  $("onboarding").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("welcomeText").innerText = "Welcome, " + user.name;
+
+  $("profileDetails").innerHTML = `
+    <p><strong>Name:</strong> ${user.name}</p>
+    <p><strong>Age:</strong> ${user.age}</p>
+    <p><strong>Job:</strong> ${user.job}</p>
+    <p><strong>Income:</strong> ${user.income}</p>
+    <p><strong>Career:</strong> ${user.careerStatus}</p>
+    <p><strong>Energy:</strong> ${user.energy}</p>
+  `;
+}
+
+function showSection(id){
+  ["home","roadmap","tracker","reports","profile"].forEach(sec => {
+    $(sec).classList.add("hidden");
+  });
+  $(id).classList.remove("hidden");
+}
+
+function generateRoadmap(){
+  const situation = getValue("currentSituation");
+  const destination = getValue("destination");
+  const timeline = getValue("timeline");
+
+  if(!situation || !destination || !timeline){
+    alert("Please answer current situation, destination and timeline.");
+    return;
+  }
+
+  const category = detectCategory(situation + " " + destination + " " + user.job);
+  roadmap = buildRoadmap(category);
+
+  tasks = roadmap.flatMap(section =>
+    section.tasks.map(task => ({
+      ...task,
+      objective:section.title,
+      completed:false,
+      proof:""
+    }))
+  );
+
+  $("detectedSituation").innerHTML = `
+    <strong>Category:</strong> ${category}<br>
+    <strong>Situation:</strong> ${situation}<br>
+    <strong>Destination:</strong> ${destination}<br>
+    <strong>Timeline:</strong> ${timeline}
+  `;
+
+  renderRoadmap();
+  renderTracker();
+  updateProgress();
+  updateReports();
+  showSection("roadmap");
+}
+
+function detectCategory(text){
+  text = text.toLowerCase();
+  if(["erp","accounting","bcom","acca","audit","consulting"].some(w=>text.includes(w))) return "ERP / Accounting Career";
+  if(["money","income","financial","save","debt","earn"].some(w=>text.includes(w))) return "Financial Stability";
+  if(["discipline","procrastinate","focus","routine","instagram","doomscroll"].some(w=>text.includes(w))) return "Discipline / Focus";
+  if(["startup","business","founder","customer","launch"].some(w=>text.includes(w))) return "Startup / Business";
+  if(["career","job","salary","resume","linkedin"].some(w=>text.includes(w))) return "Career Growth";
+  return "General Growth";
+}
+
+function task(title, what, how, time, difficulty, proofRequired){
+  return {title,what,how,time,difficulty,proofRequired};
+}
+
+function buildRoadmap(category){
+  if(category === "ERP / Accounting Career"){
+    return [
+      {
+        title:"Objective 1 — Convert accounting knowledge into ERP advantage",
+        advice:"Do not start from zero. Use accounting knowledge as your ERP entry point.",
+        tasks:[
+          task("Map accounting processes to ERP modules","Map sales, purchase, GST, receivables and payables.","Write each process and connect it to an ERP screen/workflow.","1 hour","Medium","One-page process map"),
+          task("Study ERP consultant roles","Understand functional vs technical consultant roles.","Watch ERPNext/SAP FICO consultant videos.","45 mins","Easy","Short summary")
+        ]
+      },
+      {
+        title:"Objective 2 — Build ERP proof",
+        advice:"Proof will make you more employable than certificates alone.",
+        tasks:[
+          task("Create demo company workflow","Build sales, purchase and payment flow.","Use ERPNext demo/sandbox and create fake transactions.","2 hours","Hard","Screenshots/notes"),
+          task("Write implementation case","Explain ERP setup for a small trading company.","Include users, workflows, reports and testing.","2 hours","Medium","Implementation document")
+        ]
+      }
+    ];
+  }
+
+  if(category === "Discipline / Focus"){
+    return [
+      {
+        title:"Objective 1 — Remove distraction",
+        advice:"Your environment is making distraction easy. Fix environment before motivation.",
+        tasks:[
+          task("Identify top distraction","Name the app/habit wasting most time.","Check screen time.","15 mins","Easy","Distraction named"),
+          task("Create 7-day block rule","Block distraction during work hours.","Delete app, logout, or keep phone away.","20 mins","Medium","Rule written")
+        ]
+      },
+      {
+        title:"Objective 2 — Build execution wins",
+        advice:"Start tiny. Do not chase a perfect routine.",
+        tasks:[
+          task("Complete 25-minute focus session","Work on one task only.","Phone away. Timer on.","25 mins","Easy","Work completed"),
+          task("Write 3 daily priorities","Write only 3 important tasks.","Avoid giant to-do lists.","10 mins","Easy","3 priorities")
+        ]
+      }
+    ];
+  }
+
+  return [
+    {
+      title:"Objective 1 — Make the goal specific",
+      advice:"Vague goals create vague plans.",
+      tasks:[
+        task("Rewrite situation clearly","Write what is happening, why it hurts, and what you tried.","Be specific.","20 mins","Easy","Problem statement"),
+        task("Make destination measurable","Convert destination into a visible outcome.","Use numbers, dates or proof.","30 mins","Medium","Measurable goal")
+      ]
+    },
+    {
+      title:"Objective 2 — Build weekly action system",
+      advice:"Execution needs structure.",
+      tasks:[
+        task("Create 3 weekly actions","Pick 3 direct actions toward the goal.","Each action must be provable.","30 mins","Medium","Weekly action list"),
+        task("Block time","Reserve execution time.","Put it in calendar.","15 mins","Easy","Time block")
+      ]
+    }
+  ];
+}
+
+function renderRoadmap(){
+  $("roadmapOutput").innerHTML = roadmap.map(section => `
+    <div class="roadmap-card">
+      <h3>${section.title}</h3>
+      <div class="advice">${section.advice}</div>
+      ${section.tasks.map(t => `
+        <div class="task">
+          <h4>${t.title}</h4>
+          <span class="small-tag">${t.time}</span>
+          <span class="small-tag">${t.difficulty}</span>
+          <p><strong>What:</strong> ${t.what}</p>
+          <p><strong>How:</strong> ${t.how}</p>
+          <p><strong>Proof:</strong> ${t.proofRequired}</p>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+}
+
+function renderTracker(){
+  $("taskList").innerHTML = tasks.map((t,i) => `
+    <div class="task ${t.completed ? "completed" : ""}">
+      <h4>${i+1}. ${t.title}</h4>
+      <p><strong>Objective:</strong> ${t.objective}</p>
+      <p><strong>Proof required:</strong> ${t.proofRequired}</p>
+      <textarea id="proof-${i}" placeholder="Write proof here before clicking Done" ${t.completed ? "disabled" : ""}>${t.proof}</textarea>
+      <button class="${t.completed ? "done-btn" : ""}" data-index="${i}" ${t.completed ? "disabled" : ""}>
+        ${t.completed ? "Completed" : "Done"}
+      </button>
+    </div>
+  `).join("");
+
+  document.querySelectorAll("#taskList button").forEach(btn => {
+    btn.addEventListener("click", () => markDone(Number(btn.dataset.index)));
+  });
+}
+
+function markDone(index){
+  const proof = $("proof-" + index).value.trim();
+
+  if(proof.length < 5){
+    alert("Add proof first.");
+    return;
+  }
+
+  tasks[index].completed = true;
+  tasks[index].proof = proof;
+
+  renderTracker();
+  updateProgress();
+  updateReports();
+}
+
+function updateProgress(){
+  const completed = tasks.filter(t=>t.completed).length;
+  const total = tasks.length;
+  const percent = total ? Math.round((completed/total)*100) : 0;
+
+  $("completedCount").innerText = completed;
+  $("totalCount").innerText = total;
+  $("progressPercent").innerText = percent + "%";
+  $("progressFill").style.width = percent + "%";
+}
+
+function updateReports(){
+  const completed = tasks.filter(t=>t.completed).length;
+  const total = tasks.length;
+  const percent = total ? Math.round((completed/total)*100) : 0;
+
+  $("weeklyReport").innerText = total
+    ? `You completed ${completed}/${total} tasks (${percent}%).`
+    : "Complete tasks to generate weekly insights.";
+
+  $("monthlyReport").innerText = total
+    ? "Northstar recommends reviewing missed tasks before adding new goals."
+    : "Your monthly direction report will appear here.";
+}
+</script>
+</body>
+</html>
